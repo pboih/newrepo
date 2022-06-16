@@ -18,6 +18,7 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
   const [vote, setVote] = useState(Array(anecdotes.length).fill(0))
+  const [mostvotes, setMostvotes] = useState('')
 
   const randomQuote = () => {
     const randomized = setSelected(Math.floor(Math.random()*anecdotes.length))
@@ -26,14 +27,19 @@ const App = () => {
       )
   }
 
-  const submitVote = (p) => {
+  const submitVote = () => {
     const tempArray = [...vote]
     tempArray[selected] +=1
     setVote(tempArray)
+    updateVotes(tempArray)
     console.log(tempArray)
    
   }
-   
+  
+  const updateVotes = (p) => {
+    const largestNr = Math.max.apply( Math, p )
+    setMostvotes(p.indexOf(largestNr))
+  }
   
   return (
     <div>
@@ -41,6 +47,11 @@ const App = () => {
       <p>has {vote[selected]} votes</p>
       <Button handleClick={submitVote} text="vote"/> 
       <Button handleClick={randomQuote} text="next anecdote"/>
+      <div>
+        <h1>Anecdote with most votes</h1>
+        <p>{anecdotes[mostvotes]}</p>
+
+      </div>
     </div>
   )
 }
