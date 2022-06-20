@@ -29,13 +29,13 @@ const Part = (props) => {
   )
 }  */
 
-/* const Total = (props) => {
+ const Total = (props) => {
   return (
     <>
     <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
     </>
   )
-} */
+} 
 
 const Course = (props) => { 
  
@@ -44,7 +44,9 @@ const Course = (props) => {
   <>
   <Header course = {props.course.name} />
  
-      {props.course.parts.map(x => <li key={x.id}>{x.name} {x.exercises}</li>)}
+  {props.course.parts.map(x => <li key={x.id}>{x.name} {x.exercises}</li>)}
+  
+  <Total parts={props.course.parts}/>
     
   
   </>
