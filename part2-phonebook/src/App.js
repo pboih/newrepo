@@ -56,12 +56,11 @@ const App = () => {
   
   const filterInput = filter.toUpperCase() // TODO filter case insensitive
 
-  const nameFilter = persons.map(person => person.name.includes(filter) ) //if each name includes input
-    ? persons.filter(x => x.name.includes(filter)) //Array becomes filtered Names
-    : persons //Array remains full
+    
+  const nameFilter = persons.filter(x => x.name.toUpperCase().includes(filterInput))
 
-  
-  return (
+
+    return (
     
     <div>
       <h2>Phonebook</h2>
