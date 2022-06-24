@@ -5,6 +5,17 @@ import axios from 'axios'
 
 const Countries = (props) => {
   const countryId = props.countries.map(country => country.ccn3)
+
+  // EventHandler Function,
+  // work with closure
+
+  const prepareClickHandler = (countryName) => {
+    return (  () => {
+      props.setFilter(countryName)
+    })
+  }
+  
+  
   if(props.countries.length > 10 && props.input != '' ) return (
     <p>Too many matches, specify another filter. </p>
   
@@ -32,7 +43,7 @@ const Countries = (props) => {
   else return (<ul>
   {
      props.countries.map(x =>
-       <li key={x.ccn3}>{x.name.common}</li>
+       <li key={x.ccn3}>{x.name.common}<button id={x.name.common} onClick={prepareClickHandler(x.name.common)} >show</button></li>
              )
    }
    </ul>)
@@ -74,15 +85,13 @@ const App = () => {
 
   const filterInput = filter.toUpperCase()
   const countriesFilter = countries.filter(x => x.name.common.toUpperCase().includes(filterInput) )
-  /* const countriesFilter = countries.map(country => country.filter(x => x.name.common.includes(filter)))
- */
-console.log ('filter input:',filterInput)
-console.log("countriesfilter:",countriesFilter)
+ 
+
     return (
     
     <div>
       <Filter filterValue={filter} filterHandler={handleFilterChange}/>
-      <Countries countries={countriesFilter} input={filterInput}/>
+      <Countries countries={countriesFilter} input={filterInput} setFilter={setFilter}/>
     </div>
   )
 }
