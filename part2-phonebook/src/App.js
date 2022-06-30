@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import personService from './services/persons'
 
 //COMPONENTS
 const Numbers = (props) => {
@@ -51,6 +52,9 @@ const PersonForm = (props) => {
   )
 }
 
+
+
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
@@ -58,16 +62,14 @@ const App = () => {
   const [filter, setFilter] = useState('')
   
   useEffect(() => {
-    console.log('effect')
-    axios
-    .get('http://localhost:3001/persons')
-    .then(response => {
-      console.log('promise fulfilled')
-      setPersons(response.data)
-    })
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
   }, [])
-  console.log('render', persons.length, 'persons')
-
+console.log(personService.getAll())
+ 
   const addPerson = (event) => {
     event.preventDefault()
     const nameObject = {
@@ -84,10 +86,10 @@ const App = () => {
    isFound  //if that input already exists alarm user that it already exists
     ? alert(`${newName} is already added to the phonebook`)
     : 
-    axios
-    .post('http://localhost:3001/persons', nameObject)
-    .then(response => {
-      setPersons(persons.concat(nameObject)) //add new Object to array
+   personService
+    .create(nameObject)
+    .then(returnedPerson => {
+      setPersons(persons.concat(returnedPerson)) //add new Object to array
       setNewName('')
       setNewPhone('')
     })
