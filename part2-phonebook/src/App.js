@@ -84,9 +84,14 @@ const App = () => {
    isFound  //if that input already exists alarm user that it already exists
     ? alert(`${newName} is already added to the phonebook`)
     : 
+    axios
+    .post('http://localhost:3001/persons', nameObject)
+    .then(response => {
       setPersons(persons.concat(nameObject)) //add new Object to array
       setNewName('')
       setNewPhone('')
+    })
+      
   }
  
   const handleNameChange = (event) => {
