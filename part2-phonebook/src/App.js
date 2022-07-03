@@ -3,12 +3,10 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
 
+
+
 //COMPONENTS
-const Numbers = (props) => {
-  return (
-  <div>{props.name} {props.phone}</div>
-  )
-}
+
 
 const Filter = (props) => {
   return (
@@ -20,17 +18,6 @@ const Filter = (props) => {
   )
 }
 
-const Persons = (props) => {
-  return (
-    <>
-    <ul>
-          {props.nameFilter.map(person => 
-          <Numbers key={person.name} name={person.name} phone={person.number}/>
-          )}
-    </ul>
-    </>
-  )
-}
 
 const PersonForm = (props) => {
   return (
@@ -60,7 +47,9 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [filter, setFilter] = useState('')
+
   
+
   useEffect(() => {
     personService
       .getAll()
@@ -68,14 +57,14 @@ const App = () => {
         setPersons(initialPersons)
       })
   }, [])
-console.log(personService.getAll())
+
  
   const addPerson = (event) => {
     event.preventDefault()
     const nameObject = {
       name: newName,
       number: newPhone,
-      id: persons.length +1
+      id: persons[persons.length-1].id + 1 // in delete funktion mit setCounter auf +1 updaten
     }
    const isFound = persons.some(element =>{ //if name is same as input return true
     if (element.name.toUpperCase() === nameObject.name.toUpperCase()){ //compare names in uppercase (case insensitive)
@@ -93,9 +82,26 @@ console.log(personService.getAll())
       setNewName('')
       setNewPhone('')
     })
+    .catch(error => {
+      console.log('Create Failed')
+    })
       
   }
- 
+
+  const deletePerson = (id, name) => {
+    if(window.confirm(`Delete ${name}?`)){
+    personService
+    .remove(id)
+    .then( response => {
+      personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+          })
+      })
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -112,7 +118,7 @@ console.log(personService.getAll())
 
     
   const nameFilter = persons.filter(x => x.name.toUpperCase().includes(filterInput))
-
+  
 
     return (
     
@@ -127,7 +133,11 @@ console.log(personService.getAll())
      <PersonForm submitForm={addPerson} nameValue={newName} nameHandler={handleNameChange} phoneValue={newPhone} phoneHandler={handlePhoneChange}/>
       
       <h2>Numbers</h2>
-     <Persons nameFilter={nameFilter}/>
+      <ul>
+          {nameFilter.map(person => 
+          <div key={person.id}>{person.name} {person.number} <button onClick={() => deletePerson(person.id, person.name)}>delete</button></div>
+          )}
+    </ul>
       
     </div>
   )
