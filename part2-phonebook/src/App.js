@@ -71,20 +71,35 @@ const App = () => {
       return true
     }
    })
-   
-   isFound  //if that input already exists alarm user that it already exists
-    ? alert(`${newName} is already added to the phonebook`)
-    : 
-   personService
-    .create(nameObject)
-    .then(returnedPerson => {
-      setPersons(persons.concat(returnedPerson)) //add new Object to array
-      setNewName('')
-      setNewPhone('')
-    })
-    .catch(error => {
-      console.log('Create Failed')
-    })
+   if(isFound){  //if that input already exists alarm user that it already exists
+    
+    //TODO FIX THIS
+    if(window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
+      const singlePerson = persons.find(element => {
+        if(element.name.toUpperCase()===nameObject.name.toUpperCase() ) {
+      return element.id }})
+      const personID = singlePerson.id
+      
+//TODO FIX THIS
+      personService
+        .update(personID, nameObject)
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== personID ? person : returnedPerson))
+        })
+        .catch(error => {console.log(error)})
+     }
+    }
+   else 
+      personService
+        .create(nameObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson)) //add new Object to array
+          setNewName('')
+          setNewPhone('')
+        })
+        .catch(error => {
+          console.log('Create Failed')
+        })
       
   }
 
@@ -118,7 +133,7 @@ const App = () => {
 
     
   const nameFilter = persons.filter(x => x.name.toUpperCase().includes(filterInput))
-  
+  console.log("persons:",persons)
 
     return (
     
