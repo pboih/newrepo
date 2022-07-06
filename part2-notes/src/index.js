@@ -10,7 +10,7 @@ axios
   .then(response => {
     const notes = response.data
     ReactDOM.createRoot(document.getElementById('root')).render(
-      <App/>
+      <App notes={notes}/>
     )
 })
 
