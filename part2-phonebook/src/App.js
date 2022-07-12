@@ -148,10 +148,13 @@ const App = () => {
       .then(initialPersons => {
         setPersons(initialPersons)
           })
-          .catch(error => {
-            console.log('Remove failed')
-          })
       })
+    .catch(error => {
+        setErrorMessage(`Information of ${name} has already been removed from server`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+    })
     }
   }
 
