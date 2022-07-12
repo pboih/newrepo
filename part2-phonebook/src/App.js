@@ -10,9 +10,21 @@ const Notification = ({message}) => {
   if (message === null) {
     return null
   }
-
+else
   return (
     <div className='notification'>
+      {message}
+    </div>
+  )
+}
+
+const Error = ({message}) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='error'>
       {message}
     </div>
   )
@@ -57,7 +69,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [filter, setFilter] = useState('')
-  const [successfulOperation, setSuccessfulOperation] = useState('')
+  const [successfulOperation, setSuccessfulOperation] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   
  
@@ -166,6 +179,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={successfulOperation}/>
+      <Error message={errorMessage} />
 
       <Filter filterValue={filter} filterHandler={handleFilterChange}/>
       
