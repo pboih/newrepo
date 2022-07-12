@@ -1,12 +1,22 @@
 
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personService from './services/persons'
+import './index.css'
 
 
 
 //COMPONENTS
+const Notification = ({message}) => {
+  if (message === null) {
+    return null
+  }
 
+  return (
+    <div className='notification'>
+      {message}
+    </div>
+  )
+}
 
 const Filter = (props) => {
   return (
@@ -47,8 +57,10 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [filter, setFilter] = useState('')
+  const [successfulOperation, setSuccessfulOperation] = useState('')
 
   
+ 
 
   useEffect(() => {
     personService
@@ -85,6 +97,11 @@ const App = () => {
         .update(personID, nameObject)
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== personID ? person : returnedPerson))
+          
+          setSuccessfulOperation(`Updated ${returnedPerson.name}`)
+          setTimeout(() => {
+            setSuccessfulOperation(null)
+          }, 5000)
         })
         .catch(error => {console.log(error)})
      }
@@ -96,6 +113,11 @@ const App = () => {
           setPersons(persons.concat(returnedPerson)) //add new Object to array
           setNewName('')
           setNewPhone('')
+          
+          setSuccessfulOperation(`Added ${returnedPerson.name}`)
+          setTimeout(() => {
+            setSuccessfulOperation(null)
+          }, 5000)
         })
         .catch(error => {
           console.log('Create Failed')
@@ -112,6 +134,9 @@ const App = () => {
       .getAll()
       .then(initialPersons => {
         setPersons(initialPersons)
+          })
+          .catch(error => {
+            console.log('Remove failed')
           })
       })
     }
@@ -135,11 +160,13 @@ const App = () => {
   const nameFilter = persons.filter(x => x.name.toUpperCase().includes(filterInput))
   console.log("persons:",persons)
 
+
     return (
     
     <div>
       <h2>Phonebook</h2>
-      
+      <Notification message={successfulOperation}/>
+
       <Filter filterValue={filter} filterHandler={handleFilterChange}/>
       
 
