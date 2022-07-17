@@ -45,6 +45,13 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
+app.get('/info', (request,response) => {
+    const peopleCount = persons.length
+    const date = new Date()
+    response.send(`<p>Phonebook has info for ${peopleCount} people</p>
+    <p>${date}</p>`)
+})
+
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.find(person => person.id !== id)
