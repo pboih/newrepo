@@ -66,25 +66,31 @@ const generateId = () => {
     return maxId + 1
 }
 
+
+
 app.post('/api/persons', (request, response) => {
     const body = request.body
-
-    if(!body.content) {
+    const getRandomInt = (max) => {
+        return Math.floor(Math.random() * max)
+    }
+    
+    if(!body.name) {
         return response.status(400).json({
             error: 'content missing'
         })
     }
     const person = {
-        content: body.content,
+        id: getRandomInt(9000),
         name: body.name,
-        number: body.nummber,
-        id: generateId(),
+        number: body.nummber
+        
     }
     
     persons = persons.concat(person)
 
     response.json(person)
 })
+
 
 const PORT = 3001
 
