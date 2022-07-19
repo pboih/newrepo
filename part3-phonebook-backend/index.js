@@ -74,18 +74,22 @@ app.post('/api/persons', (request, response) => {
         return Math.floor(Math.random() * max)
     }
     
-    if(!body.name) {
+    if(!body.name || !body.number) {
         return response.status(400).json({
             error: 'content missing'
         })
     }
+    
     const person = {
         id: getRandomInt(9000),
         name: body.name,
-        number: body.nummber
-        
+        number: body.nummber    
     }
-    
+    if (Object.values(persons).indexOf(body.name)) {
+        return response.status(400).json({
+            error: 'Name already exists'
+        })
+    }
     persons = persons.concat(person)
 
     response.json(person)
