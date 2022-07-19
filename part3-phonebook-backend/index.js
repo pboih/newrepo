@@ -27,7 +27,7 @@ let persons = [
 ]
 
 app.get('/', (request, response) => {
-    response.send('<h1>PHONEBOOK</h1>')
+    response.send('<h1>Phonebook</h1>')
 })
 
 app.get('/api/persons', (request,response) => {
@@ -54,7 +54,7 @@ app.get('/info', (request,response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
-    persons = persons.find(person => person.id !== id)
+    persons = persons.filter(person => person.id !== id)
 
     response.status(204).end()
 })
